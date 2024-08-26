@@ -1,75 +1,62 @@
-// DOMContentLoaded 이벤트를 사용해 DOM이 준비된 후 스크립트를 실행
-document.addEventListener('DOMContentLoaded', function() {
-    // 다크/라이트 모드 전환
-    document.getElementById("themeToggle").addEventListener("click", function(event) {
-        event.preventDefault();
-        const bodyClass = document.body.classList;
-        if (bodyClass.contains("dark-mode")) {
-            bodyClass.remove("dark-mode");
-            bodyClass.add("light-mode");
-            document.getElementById("themeToggle").textContent = "☀️ 라이트모드";
-        } else {
-            bodyClass.remove("light-mode");
-            bodyClass.add("dark-mode");
-            document.getElementById("themeToggle").textContent = "🌙 다크모드";
-        }
-    });
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>태호의 공간에 온걸 환영합니다!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+<header>
+    <h1>태호의 공간에 온걸 환영합니다!</h1>
+    <nav>
+        <ul>
+            <li><a href="#" id="mainLink">메인</a></li>
+            <li><a href="#" id="worksLink">작업물</a></li>
+            <li><a href="#" id="infoLink">정보</a></li>
+            <li><a href="#" id="downloadsLink">다운로드</a></li>
+            <li><a href="#" id="boardLink">자유게시판</a></li>
+            <li><a href="#" id="questionsLink">질문</a></li>
+            <li><a href="#" id="mypageLink">마이페이지</a></li>
+            <li><a href="#" id="themeToggle">🌙 다크모드</a></li>
+        </ul>
+    </nav>
+</header>
 
-    // 섹션을 표시하는 함수
-    function showSection(sectionId) {
-        const sections = document.querySelectorAll('main section');
-        sections.forEach(section => {
-            section.style.display = 'none';
-        });
-        document.getElementById(sectionId).style.display = 'block';
-    }
+<main>
+    <section id="main-image">메인 이미지 섹션</section>
+    <section id="works-section" style="display:none;">작업물 섹션</section>
+    <section id="info-section" style="display:none;">정보 섹션</section>
+    <section id="downloads-section" style="display:none;">다운로드 섹션</section>
+    <section id="board-section" style="display:none;">자유게시판 섹션</section>
+    <section id="questions-section" style="display:none;">질문 섹션</section>
+    <section id="mypage-section" style="display:none;">
+        <div id="login-section">
+            <h2>로그인</h2>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="사용자 이름" required>
+                <input type="password" id="loginPassword" placeholder="비밀번호" required>
+                <button type="submit">로그인</button>
+            </form>
+            <p>계정이 없으신가요? <a href="#" id="showSignup">회원가입</a></p>
+        </div>
+        <div id="signup-section" style="display:none;">
+            <h2>회원가입</h2>
+            <form id="signupForm">
+                <input type="text" id="signupUsername" placeholder="사용자 이름" required>
+                <input type="password" id="signupPassword" placeholder="비밀번호" required>
+                <button type="submit">회원가입</button>
+            </form>
+            <p>이미 계정이 있으신가요? <a href="#" id="showLogin">로그인</a></p>
+        </div>
+        <div id="user-info" style="display:none;">
+            <h2>마이페이지</h2>
+            <p>환영합니다, <span id="usernameDisplay"></span>님!</p>
+            <button id="logoutBtn">로그아웃</button>
+        </div>
+    </section>
+</main>
 
-    // URL 상태를 기반으로 섹션 전환
-    function handleNavigation() {
-        const url = new URL(window.location);
-        const section = url.searchParams.get('section') || 'main-image';
-        showSection(section);
-    }
-
-    // 메뉴 링크 클릭 이벤트
-    function setupNavigation() {
-        const links = {
-            mainLink: 'main-image',
-            worksLink: 'works-section',
-            infoLink: 'info-section',
-            downloadsLink: 'downloads-section',
-            boardLink: 'board-section',
-            questionsLink: 'questions-section',
-            adminLoginLink: 'adminLogin'
-        };
-
-        for (let linkId in links) {
-            document.getElementById(linkId).addEventListener("click", function(event) {
-                event.preventDefault();
-                navigateToSection(links[linkId]);
-            });
-        }
-    }
-
-    // URL 상태에 따라 섹션 전환
-    function navigateToSection(sectionId) {
-        const url = new URL(window.location);
-        url.searchParams.set('section', sectionId);
-        history.pushState({ section: sectionId }, '', url);
-        showSection(sectionId);
-    }
-
-    // 브라우저 뒤로/앞으로 가기 버튼 클릭 시
-    window.addEventListener('popstate', function(event) {
-        if (event.state && event.state.section) {
-            showSection(event.state.section);
-        } else {
-            showSection('main-image');
-        }
-    });
-
-    // 초기 페이지 로드 시 섹션 처리
-    handleNavigation();
-    setupNavigation();
-});
-
+<script src="script.js"></script>
+</body>
+</html>
