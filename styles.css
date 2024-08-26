@@ -1,4 +1,4 @@
-/* 기본 스타일 */
+/* 기존 스타일 */
 body {
     font-family: Arial, sans-serif;
     background-color: #121212;
@@ -47,61 +47,43 @@ h2 {
     height: auto;
 }
 
-textarea {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 10px;
+/* 로그인 및 회원가입 */
+#login-section, #signup-section, #user-info {
+    padding: 20px;
+    background-color: #333;
+    border-radius: 5px;
+    margin: 10px auto;
+    max-width: 400px;
 }
 
-button {
-    padding: 10px 20px;
+form input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
+}
+
+form button {
+    padding: 10px;
     background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 5px;
 }
 
-button:hover {
+form button:hover {
     background-color: #45a049;
 }
 
-.admin-comment {
-    background-color: #ffeb3b;
-    color: black;
-    padding: 10px;
-    margin-bottom: 10px;
+a {
+    color: #4CAF50;
 }
 
-.admin-post {
-    background-color: #ffeb3b;
-    color: black;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.upload-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    color: black;
-}
-
-.upload-popup h3 {
-    margin-top: 0;
-}
-
-.upload-popup input[type="text"],
-.upload-popup input[type="file"] {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.upload-popup button {
-    width: 48%;
-    margin: 2%;
+a:hover {
+    color: #45a049;
 }
