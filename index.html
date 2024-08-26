@@ -1,38 +1,155 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>태호의 공간에 온걸 환영합니다!</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body class="dark-mode">
-<header>
-    <h1>태호의 공간에 온걸 환영합니다!</h1>
-    <nav>
-        <ul>
-            <li><a href="#" id="mainLink">메인</a></li>
-            <li><a href="#" id="worksLink">작업물</a></li>
-            <li><a href="#" id="infoLink">정보</a></li>
-            <li><a href="#" id="downloadsLink">다운로드</a></li>
-            <li><a href="#" id="boardLink">자유게시판</a></li>
-            <li><a href="#" id="questionsLink">질문</a></li>
-            <li><a href="#" id="adminLoginLink">관리자 메뉴</a></li>
-            <li><a href="#" id="themeToggle">🌙 다크모드</a></li>
-        </ul>
-    </nav>
-</header>
+document.addEventListener('DOMContentLoaded', function() {
+    // 다크/라이트 모드 전환
+    document.getElementById("themeToggle").addEventListener("click", function(event) {
+        event.preventDefault();
+        const bodyClass = document.body.classList;
+        if (bodyClass.contains("dark-mode")) {
+            bodyClass.remove("dark-mode");
+            bodyClass.add("light-mode");
+            document.getElementById("themeToggle").textContent = "☀️ 라이트모드";
+        } else {
+            bodyClass.remove("light-mode");
+            bodyClass.add("dark-mode");
+            document.getElementById("themeToggle").textContent = "🌙 다크모드";
+        }
+    });
 
-<main>
-    <section id="main-image">메인 이미지 섹션</section>
-    <section id="works-section" style="display:none;">작업물 섹션</section>
-    <section id="info-section" style="display:none;">정보 섹션</section>
-    <section id="downloads-section" style="display:none;">다운로드 섹션</section>
-    <section id="board-section" style="display:none;">자유게시판 섹션</section>
-    <section id="questions-section" style="display:none;">질문 섹션</section>
-    <section id="adminLogin" style="display:none;">관리자 로그인 섹션</section>
-</main>
+    // 섹션을 표시하는 함수
+    function showSection(sectionId) {
+        const sections = document.querySelectorAll('main section');
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById(sectionId).style.display = 'block';
+    }
 
-<script src="script.js"></script>
-</body>
-</html>
+    // URL 상태를 기반으로 섹션 전환
+    function handleNavigation() {
+        const url = new URL(window.location);
+        const section = url.searchParams.get('section') || 'main-image';
+        showSection(section);
+    }
+
+    // 메뉴 링크 클릭 이벤트
+    document.getElementById("mainLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        navigateToSection('main-image');
+    });
+
+    document.getElementById("worksLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        navigateToSection('works-section');
+    });
+
+    document.getElementById("infoLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        navigateToSection('info-section');
+    });
+
+    document.getElementById("downloadsLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        navigateToSection('downloads-section');
+    });
+
+    document.getElementById("boardLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        navigateToSection('board-section');
+    });
+
+    document.getElementById("questionsLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        navigateToSection('questions-section');
+    });
+
+    document.getElementById("mypageLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        navigateToSection('mypage-section');
+    });
+
+    // URL 상태에 따라 섹션 전환
+    function navigateToSection(sectionId) {
+        const url = new URL(window.location);
+        url.searchParams.set('section', sectionId);
+        history.pushState({ section: sectionId }, '', url);
+        showSection(sectionId);
+    }
+
+    // 브라우저 뒤로/앞으로 가기 버튼 클릭 시
+    window.addEventListener('popstate', function(event) {
+        if (event.state && event.state.section) {
+            showSection(event.state.section);
+        } else {
+            showSection('main-image');
+        }
+    });
+
+    // 초기 페이지 로드 시 섹션 처리
+    handleNavigation();
+
+    // 로그인 및 회원가입 기능
+    const users = {}; // 로컬 스토리지에 저장된 사용자 데이터
+
+    document.getElementById("showSignup").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("signup-section").style.display = "block";
+    });
+
+    document.getElementById("showLogin").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.getElementById("signup-section").style.display = "none";
+        document.getElementById("login-section").style.display = "block";
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+
+        if (users[username] && users[username].password === password) {
+            localStorage.setItem('loggedInUser', username);
+            updateUserInfo();
+            navigateToSection('mypage-section');
+        } else {
+            alert("잘못된 사용자 이름 또는 비밀번호입니다.");
+        }
+    });
+
+    document.getElementById("signupForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const username = document.getElementById("signupUsername").value;
+        const password = document.getElementById("signupPassword").value;
+
+        if (!users[username]) {
+            users[username] = { password: password };
+            localStorage.setItem('users', JSON.stringify(users));
+            alert("회원가입이 완료되었습니다.");
+            document.getElementById("signup-section").style.display = "none";
+            document.getElementById("login-section").style.display = "block";
+        } else {
+            alert("이미 존재하는 사용자 이름입니다.");
+        }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", function() {
+        localStorage.removeItem('loggedInUser');
+        navigateToSection('mypage-section');
+    });
+
+    function updateUserInfo() {
+        const username = localStorage.getItem('loggedInUser');
+        if (username) {
+            document.getElementById("usernameDisplay").textContent = username;
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("signup-section").style.display = "none";
+            document.getElementById("user-info").style.display = "block";
+        } else {
+            document.getElementById("login-section").style.display = "block";
+            document.getElementById("signup-section").style.display = "none";
+            document.getElementById("user-info").style.display = "none";
+        }
+    }
+
+    // 로그인 상태에 따라 사용자 정보 업데이트
+    updateUserInfo();
+});
