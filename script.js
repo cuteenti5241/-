@@ -32,40 +32,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 메뉴 링크 클릭 이벤트
-    document.getElementById("mainLink").addEventListener("click", function(event) {
-        event.preventDefault();
-        navigateToSection('main-image');
-    });
+    function setupNavigation() {
+        const links = {
+            mainLink: 'main-image',
+            worksLink: 'works-section',
+            infoLink: 'info-section',
+            downloadsLink: 'downloads-section',
+            boardLink: 'board-section',
+            questionsLink: 'questions-section',
+            adminLoginLink: 'adminLogin'
+        };
 
-    document.getElementById("worksLink").addEventListener("click", function(event) {
-        event.preventDefault();
-        navigateToSection('works-section');
-    });
-
-    document.getElementById("infoLink").addEventListener("click", function(event) {
-        event.preventDefault();
-        navigateToSection('info-section');
-    });
-
-    document.getElementById("downloadsLink").addEventListener("click", function(event) {
-        event.preventDefault();
-        navigateToSection('downloads-section');
-    });
-
-    document.getElementById("boardLink").addEventListener("click", function(event) {
-        event.preventDefault();
-        navigateToSection('board-section');
-    });
-
-    document.getElementById("questionsLink").addEventListener("click", function(event) {
-        event.preventDefault();
-        navigateToSection('questions-section');
-    });
-
-    document.getElementById("adminLoginLink").addEventListener("click", function(event) {
-        event.preventDefault();
-        navigateToSection('adminLogin');
-    });
+        for (let linkId in links) {
+            document.getElementById(linkId).addEventListener("click", function(event) {
+                event.preventDefault();
+                navigateToSection(links[linkId]);
+            });
+        }
+    }
 
     // URL 상태에 따라 섹션 전환
     function navigateToSection(sectionId) {
@@ -86,4 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 초기 페이지 로드 시 섹션 처리
     handleNavigation();
+    setupNavigation();
 });
+
